@@ -209,3 +209,38 @@ target += num;
 >
 > [CERT, EXP50-J.](https://wiki.sei.cmu.edu/confluence/display/java/EXP50-J.+Do+not+confuse+abstract+object+equality+with+reference+equality) - Do not confuse abstract object equality with reference equality 
 
+
+
+------
+
+#### S4682 不应在基础数据类型上使用"@CheckForNull"或"@Nullable"
+
+> #### S4682 "@CheckForNull" or "@Nullable" should not be used on primitive types
+>
+> **minor** **code smell**
+>
+> By definition, primitive types are not Objects and so they can’t be null. Adding `@CheckForNull` or `@Nullable` on primitive types adds confusion and is useless.
+>
+> This rule raises an issue when `@CheckForNull` or `@Nullable` is set on a method returning a primitive type: byte, short, int, long, float, double, boolean, char.
+>
+> **Noncompliant Code Example**
+>
+> ```java
+> @CheckForNull boolean isFoo() {
+> ...
+> }
+> ```
+>
+> **Compliant Solution**
+>
+> ```java
+> boolean isFoo() {
+> ...
+> }
+> ```
+>
+> 
+>
+> ------
+>
+
