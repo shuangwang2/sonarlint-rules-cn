@@ -240,7 +240,58 @@ target += num;
 > ```
 >
 > 
+
+
+
+------
+
+
+
+#### S3753 使用"@SessionAttributes"的"@Contoller"类必须在其"SessionStatus"对象上调用"setComplete"
+
+> #### S3753 "@Contoller" classes that use "@SessionAttributes" must call "setComplete" on their "SessionStatus" objects
 >
-> ------
+> **blocker** **bug**
 >
+> A Spring `@Controller` that uses `@SessionAttributes` is designed to handle a stateful / multi-post form. Such `@Controllers` use the specified `@SessionAttributes` to store data on the server between requests. That data should be cleaned up when the session is over, but unless `setComplete()` is called on the `SessionStatus` object from a `@RequestMapping` method, neither Spring nor the JVM will know it’s time to do that. Note that the `SessionStatus` object must be passed to that method as a parameter.
+>
+> **Noncompliant Code Example**
+>
+> ```java
+> @Controller
+> @SessionAttributes("hello")  // Noncompliant; this doesn't get cleaned up
+> public class HelloWorld {
+> 
+> 	@RequestMapping("/greet", method = GET)
+> 	public String greet(String greetee) {
+> 
+>     	return "Hello " + greetee;
+>     }
+> }
+> ```
+>
+> **Compliant Solution**
+>
+> ```java
+> @Controller
+> @SessionAttributes("hello")
+> public class HelloWorld {
+> 
+> 	@RequestMapping("/greet", method = GET)
+> 	public String greet(String greetee) {
+> 	
+> 		return "Hello " + greetee;
+> 	}
+> 
+> 	@RequestMapping("/goodbye", method = POST)
+> 	public String goodbye(SessionStatus status) {
+> 		//...
+> 		status.setComplete();
+> 	}
+> }
+> ```
+
+
+
+------
 
